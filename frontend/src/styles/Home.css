@@ -1,0 +1,25 @@
+/* Container for the whole page */
+div {
+    font-family: Arial, sans-serif;
+  }
+
+.container{
+  width: 100vw;
+  /* height: 100vh; */
+  background-color: gray;
+  margin: 0 auto;
+}
+.home-container {
+ 
+    max-width: 800px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: black;
+    border: 5px solid black;
+    border-radius: 50px;
+    
+  }  
+  
+  /* Styles for the notes section */
+  

@@ -1,14 +1,15 @@
-import React,{useState} from "react";
+import React,{useState,useEffect,useContext} from "react";
 import api from "../api";
 // import { getNotes } from "../pages/Home";
 import "../styles/PopupForm.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import {NoteContext} from '../pages/Home'
 function PopupForm(props) {
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
-
+    const [notes, setNotes] = useContext(NoteContext);
+   
     const createNote = (e) => {
         e.preventDefault();
         api
@@ -17,11 +18,13 @@ function PopupForm(props) {
                 if (res.status === 201) alert("Note created!");
                 else alert("Failed to make note.");
                 props.toggle();
-                console.log("1")
-                getNotes();
-                console.log("1")
+                // console.log("1")
+                let newNote = { content, title };
+                setNotes(t =>[...t,newNote]) //use updater function and change the previous stateof the object not the current state.
+                // getNotes();
+                // console.log("1")
             })
-            .catch((err) => alert(err));
+            .catch((err) => alert('popup form error',{err}));
     };
 
     return (

@@ -5,6 +5,11 @@ import { faTrashCan ,faPenToSquare} from '@fortawesome/free-regular-svg-icons'
 
 function Note({ note, onDelete }) {
     const formattedDate = new Date(note.created_at).toLocaleDateString("en-IN")
+    const newDate = new Date().toLocaleDateString("en-IN")
+    // console.log(formattedDate,newDate)
+    let date = (formattedDate == "Invalid Date") ? newDate : formattedDate
+//    console.log(date)
+    
 
     return (
         <div className="note-container">
@@ -24,7 +29,8 @@ function Note({ note, onDelete }) {
             </div>
            
             <p className="note-content">{note.content}</p>
-            <p className="note-date">{formattedDate}</p>
+            <p className="note-date">{date }</p>
+            {/* <p className="note-date">{newDate}</p> */}
             {/* <button className="delete-button" onClick={() => onDelete(note.id)}>
                 Delete
             </button> */}

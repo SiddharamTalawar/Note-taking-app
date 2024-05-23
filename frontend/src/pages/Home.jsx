@@ -7,10 +7,12 @@ import { createContext } from 'react';
 
 export const NoteContext = createContext(null);
 
+
 function Home() {
     const [notes, setNotes] = useState([]);
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
+    
     
 
     useEffect(() => {
@@ -34,6 +36,10 @@ function Home() {
     }
 
     const deleteNote = (id) => {
+        if(!id){
+            alert("somthing went wrong! please refresh the the page and try again.");
+        }
+        else{
         api
             .delete(`/api/notes/delete/${id}/`)
             .then((res) => {
@@ -43,6 +49,7 @@ function Home() {
                 removeNote(id)
             })
             .catch((error) => alert(error));
+        }
     };
 
     const createNote = (e) => {
@@ -63,46 +70,20 @@ function Home() {
         <div className="container">
             <div className="home-container">
             <div className="notes-section">
+                
             <NoteContext.Provider value={[notes, setNotes]}>
                 <h2>Notes <CreateNoteButton /></h2>
-            </NoteContext.Provider>
+            
                 {notes.map((note) => (
                     <Note note={note} onDelete={deleteNote} key={note.id} />
                 ))}
+                </NoteContext.Provider>
+            
             </div>
 
             
             
-            {/* <div className="form-section"> */}
-            {/* <div className="popup">
-            <div className="popup-inner">
-            <h2>Create a Note</h2>
-            <form onSubmit={createNote}>
-                <label htmlFor="title">Title:</label>
-                <br />
-                <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    required
-                    onChange={(e) => setTitle(e.target.value)}
-                    value={title}
-                />
-                <label htmlFor="content">Content:</label>
-                <br />
-                <textarea
-                    id="content"
-                    name="content"
-                    required
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                ></textarea>
-                <br />
-                <input type="submit" value="Submit"></input>
-            </form>
-            <button >Close</button>
-            </div>
-            </div> */}
+           
             
         </div>
         </div>

@@ -5,6 +5,8 @@ import "../styles/PopupForm.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import {NoteContext} from '../pages/Home'
+
+
 function PopupForm(props) {
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
@@ -20,20 +22,55 @@ function PopupForm(props) {
                 props.toggle();
                 // console.log("1")
                 let newNote = { content, title };
-                setNotes(t =>[...t,newNote]) //use updater function and change the previous stateof the object not the current state.
+                setNotes(t =>[newNote,...t]) //use updater function and change the previous stateof the object not the current state.
                 // getNotes();
                 // console.log("1")
+                 
             })
             .catch((err) => alert('popup form error',{err}));
     };
 
+    const retreiveNote = (id) => {
+        console.log("retrive note run ................")
+        api
+            .get(`/api/notes/retrieve/${id}/`)
+            .then((res) => res.data)
+            .then((data) => {
+                setContent(data.content);
+                setTitle(data.title);
+            })
+            .catch((err) => alert(err));
+    };
+    const updateNote = () => {
+        console.log("update note  run ................")
+        console.log(update_id)
+        api
+            .put(`/api/notes/update/${update_id}/`, { content, title })
+            .then((res) => {
+                if (res.status === 200) alert("Note updated!");
+                else alert("Failed to update note.");
+                props.toggle();
+                // getNotes();
+            })
+            .catch((err) => alert(err));
+    };
+
+    
+
+    const update_id = props.update_id;
+    useEffect(() => {
+        if (update_id) {
+            retreiveNote(update_id);
+        }
+    }, [update_id]);
     return (
         <div className="popup">
             <div className="popup-inner">
                 <i onClick={props.toggle}><FontAwesomeIcon icon={faXmark} style={{color: "black"}}/></i>
             {/* <button onClick={props.toggle}><i><FontAwesomeIcon icon={faXmark} /></i></button> */}
             <h2>Create a Note</h2>
-            <form onSubmit={createNote}>
+            {/* <form onSubmit={createNote}> */}
+            <form onSubmit={update_id ? updateNote : createNote}>
                 <label htmlFor="title">Title:</label>
                 {/* <br /> */}
                 <input
@@ -49,6 +86,8 @@ function PopupForm(props) {
                 <textarea
                     id="content"
                     name="content"
+                    rows={"5"}
+                    cols={"50"}
                     required
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
